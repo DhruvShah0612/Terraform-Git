@@ -269,6 +269,60 @@ terraform apply
 ```
 
 
+### Task 5:- Create a New Branch for a Feature (e.g., Add Security Group)
+```
+nano security-group.tf
+```
+```
+resource "aws_security_group" "web_sg" {
+  name        = "web-sg"
+  description = "Allow HTTP and SSH traffic"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow SSH
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Allow HTTP
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name  = "web-sg"
+    Owner = "Dhruv Shah"
+  }
+}
+
+data "aws_vpc" "default" {
+  default = true
+}
+```
+### Git Commands for Feature Branch
+```
+git checkout -b feature
+```
+```
+git add security-group.tf
+```
+```
+git commit -m "✨ Added Security Group for web access"
+```
+```
+git push -u origin feature
+```
 
 
 
