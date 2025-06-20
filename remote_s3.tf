@@ -1,11 +1,11 @@
-resource "random_id" "bucket_id" {
+resource "random_id" "remote_bucket_id" {
   byte_length = 4
 }
 
-module "s3_bucket" {
-  source  = "github.com/terraform-aws-modules/terraform-aws-s3-bucket"
+module "remote_s3" {
+  source = "git::https://github.com/DhruvShah0612/Terraform-Git.git//modules/s3?ref=v1.0.0"
 
-  bucket = "dhruv-auto-tf-s3-${random_id.bucket_id.hex}"
+  bucket = "dhruv-remote-s3-${random_id.remote_bucket_id.hex}"
   acl    = null
   control_object_ownership = true
   object_ownership         = "BucketOwnerEnforced"
@@ -15,7 +15,7 @@ module "s3_bucket" {
   }
 
   tags = {
-    Environment = "dev"
+    Environment = "prod"
     Owner       = "Dhruv Shah"
   }
 }

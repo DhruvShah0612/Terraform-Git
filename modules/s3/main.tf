@@ -1,17 +1,26 @@
-module "remote_s3" {
-  source = "git::https://github.com/DhruvShah0612/Terraform-Git.git//modules/s3?ref=v1.0.0"
+resource "aws_s3_bucket" "this" {
+  bucket = var.bucket
+  force_destroy = true
+}
 
-  bucket = "dhruv-remote-s3-${random_id.bucket_id.hex}"
-  acl    = null
-  control_object_ownership = true
-  object_ownership         = "BucketOwnerEnforced"
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
 
-  versioning = {
-    enabled = true
-  }
-
-  tags = {
-    Environment = "prod"
-    Owner       = "Dhruv Shah"
+  versioning_configuration {
+    status = var.versioning.enabled ? "Enabled" : "Suspended"
   }
 }
+
+resource "aws_s3_bucket_ownership_controls" "this" {
+  bucket = aws_s3_bucket.this.id
+
+  rule {
+    object_ownership = var.object_ownership
+  }
+}
+
+variable "bucket" {}
+variable "versioning" {
+  type = object({ enabled = bool })
+}
+variable "object_ownership" {}
