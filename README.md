@@ -177,52 +177,28 @@ chmod +x push_code.sh
 ```
 https://github.com/terraform-aws-modules/terraform-aws-s3-bucket
 ```
-✅ Step 1: Add S3 Module to main.tf
-
+✅ Step 1: add in main.tf
 ```
-terraform {
-  required_providers {
-    github = {
-      source  = "integrations/github"
-      version = "~> 6.0"
-    }
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.83.0"
-    }
-  }
-}
-
-# Get GitHub token from external shell script
-data "external" "github_token" {
-  program = ["bash", "${path.module}/get_token.sh"]
-}
-
-# GitHub provider (for creating repo)
-provider "github" {
-  token = data.external.github_token.result.token
-  owner = "DhruvShah0612"
-}
-
-# AWS provider (for S3 bucket)
 provider "aws" {
   region = "ap-south-1"
 }
-
-# GitHub repo creation
-resource "github_repository" "new_repo" {
-  name        = "Terraform-git-auto"
-  description = "Repository created using Terraform"
-  visibility  = "public"
-  auto_init   = true
+```
+✅ Step 2: create new file s3-module.tf
+```
+nano s3-module.tf
+```
+```
+resource "random_id" "bucket_id" {
+  byte_length = 4
 }
 
-# S3 bucket module from GitHub (public module)
 module "s3_bucket" {
   source  = "github.com/terraform-aws-modules/terraform-aws-s3-bucket"
 
-  bucket = "dhruv-auto-tf-s3-${random_id.bucket_id.hex}"
+  bucket = "dhruv-auto-s3-${random_id.bucket_id.hex}"
+
   acl    = null
+
   control_object_ownership = true
   object_ownership         = "BucketOwnerEnforced"
 
@@ -235,15 +211,22 @@ module "s3_bucket" {
     Owner       = "Dhruv Shah"
   }
 }
+```
 
-resource "random_id" "bucket_id" {
-  byte_length = 4
+✅ Step 3: update in variable.tf
+```
+variable "github_owner" {
+  type    = string
+  default = "DhruvShah0612"
+}
+
+variable "repo_name" {
+  type    = string
+  default = "Terraform-Git"
 }
 ```
 
-
-
-✅ Step 2: Create Full S3 Access Policy Manually
+✅ Step 4: Create Full S3 Access Policy Manually
 
 🔧 Step-by-Step (IAM Console)
 1. Go to AWS Console → IAM → Policies → Create Policy
@@ -265,15 +248,19 @@ resource "random_id" "bucket_id" {
 3. Name it: CustomS3FullAccess
 4. Click Create Policy
 
-✅ Attach This Policy to Your IAM User
+✅ Step 5:  Attach This Policy to Your IAM User
+
 5. Go to IAM → Users → admin → Permissions → Add
 6. Choose "Attach policies directly"
 7. Search for: CustomS3FullAccess
 8. Select it, and click "Add Permissions"
 
-In terminal:
+
+### Run terminal:
 ```
-terraform init 
+terraform init
+```
+```
 terraform apply
 ```
 
