@@ -261,7 +261,7 @@ variable "repo_name" {
 terraform init
 ```
 ```
-terraform apply
+terraform apply -auto-approve
 ```
 ### for push 
 ```
@@ -324,5 +324,23 @@ git commit -m "✨ Added Security Group for web access"
 git push -u origin feature
 ```
 
-
-
+### Task 6:- Merge a Feature Branch Back to Main and Re-Apply Terraform
+```
+git checkout main
+```
+```
+git pull origin main
+```
+```
+git merge feature
+```
+```
+git push origin main
+```
+### Re-Apply Terraform
+```
+terraform init
+```
+```
+terraform apply -auto-approve
+```
