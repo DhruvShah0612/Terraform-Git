@@ -369,3 +369,52 @@ git push origin v1.0.0
 ```
 📎 https://github.com/DhruvShah0612/Terraform-Git/tags
 ```
+
+### Task 8: Use a GitHub Repo as a Remote Module in Terraform (source = "git::...")
+✅ Step 1: Ensure the Repo is Structured Correctly
+```
+Terraform-Git/
+├── modules/
+│   └── s3/
+│       └── main.tf       <-- only S3 bucket logic
+├── main.tf               <-- where you will use the remote module
+├── varible.tf
+├── get_token.sh
+├── .gitignore
+├── push_code.sh
+└── README.md
+```
+
+✅ Step 2: Add Remote Module Block in Your main.tf
+In main.tf
+
+```
+module "remote_s3" {
+  source = "git::https://github.com/DhruvShah0612/Terraform-Git.git//modules/s3?ref=v1.0.0"
+
+  bucket                     = "dhruv-remote-s3-${random_id.remote_id.hex}"
+  acl                        = null
+  control_object_ownership  = true
+  object_ownership           = "BucketOwnerEnforced"
+
+  versioning = {
+    enabled = true
+  }
+
+  tags = {
+    Environment = "prod"
+    Owner       = "Dhruv Shah"
+  }
+}
+
+resource "random_id" "remote_id" {
+  byte_length = 4
+}
+```
+```
+terraform init  
+terraform apply -auto-approve
+```
+✅ Step 4: Confirm
+Go to your AWS Console → S3
+✅ You’ll see a new bucket with prefix dhruv-remote-s3-*
