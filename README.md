@@ -344,3 +344,28 @@ terraform init
 ```
 terraform apply -auto-approve
 ```
+
+### Task 7: Tag a Git Commit for a Specific Terraform Version (e.g., v1.0.0)
+#### ✅ Step 1: Commit Everything (if not done already)
+```
+git add .
+```
+```
+git commit -m "📦 Final changes before v1.0.0 release"
+```
+
+#### ✅ Step 2: Create Git Tag
+```
+git tag v1.0.0
+```
+
+#### ✅ Step 3: Push the Tag to GitHub
+```
+git push origin v1.0.0
+```
+
+#### ✅ Step 4: Verify on GitHub
+#### Visit:
+```
+📎 https://github.com/DhruvShah0612/Terraform-Git/tags
+```
