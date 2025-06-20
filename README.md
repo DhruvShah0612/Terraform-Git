@@ -98,7 +98,11 @@ chmod +x init_repo.sh
 terraform plan -var='github_owner=DhruvShah0612' -var='repo_name=Terraform-Git'
 terraform apply -auto-approve -var='github_owner=DhruvShah0612' -var='repo_name=Terraform-Git'
 ```
-
+✅ Result
+## The Terraform-created GitHub repo will be:
+```
+📎 https://github.com/DhruvShah0612/Terraform-Git
+```
 
 
 
