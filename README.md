@@ -93,16 +93,87 @@ terraform apply -auto-approve -var='github_owner=DhruvShah0612' -var='repo_name=
 ```
 chmod +x init_repo.sh
 ```
-
+### Run terraform to create repo 
 ```
 terraform plan -var='github_owner=DhruvShah0612' -var='repo_name=Terraform-Git'
 terraform apply -auto-approve -var='github_owner=DhruvShah0612' -var='repo_name=Terraform-Git'
 ```
 ✅ Result
-## The Terraform-created GitHub repo will be:
+### The Terraform-created GitHub repo will be:
 ```
 📎 https://github.com/DhruvShah0612/Terraform-Git
 ```
+
+### Task :-3: Create a .gitignore File for Terraform
+```
+nano .gitignore
+```
+```
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Ignore Terraform crash logs
+crash.log
+
+# Ignore .terraform directory
+.terraform/
+
+# Ignore any sensitive file scripts
+*.pem
+get_token.sh
+
+# Ignore plan output
+*.tfplan
+
+# Ignore local IDE/editor settings
+.vscode/
+.idea/
+*.swp
+.DS_Store
+```
+### Task 2:- Push Terraform Project to GitHub 
+```
+nano push_code.sh
+```
+```
+#!/bin/bash
+
+set -e
+
+GITHUB_USER="DhruvShah0612"
+REPO_NAME="Terraform-Git"
+REPO_URL="https://github.com/$GITHUB_USER/$REPO_NAME.git"
+
+echo "🔧 Initializing Git repo..."
+git init
+
+echo "🔗 Adding remote..."
+git remote remove origin 2>/dev/null || true
+git remote add origin "$REPO_URL"
+
+echo "📥 Pulling remote to prevent conflict..."
+git pull origin main --allow-unrelated-histories || true
+
+echo "📦 Adding & committing files..."
+git add .
+git commit -m "🔧 Setup Terraform repo with .gitignore and main configuration" || echo "✅ Nothing new to commit."
+
+echo "🚀 Pushing to GitHub..."
+git branch -M main
+git push -u origin main
+
+echo "✅ Successfully pushed to $REPO_URL"
+```
+```
+chmod +x push_code.sh
+```
+```
+./push_code.sh
+```
+
+
+
 
 
 
