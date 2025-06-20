@@ -263,6 +263,12 @@ terraform init
 ```
 terraform apply
 ```
+### for push 
+```
+./push_code.sh
+```
+
+
 
 
 
